@@ -21,6 +21,8 @@ import TableList from "views/TableList.js";
 import Notifications from "views/Notifications.js";
 import Icons from "views/Icons.js";
 
+import CadastroEscolas from "components/CadastroEscolas";
+
 const dashboardRoutes = [
   {
     path: "/dashboard",
@@ -68,7 +70,7 @@ const dashboardRoutes = [
     path: "/cadastro-escolas",
     name: "Cadastro Escolas",
     icon: "nc-icon nc-notes",
-    component: Notifications,
+    component: CadastroEscolas,
     layout: "/admin",
   },
   {
