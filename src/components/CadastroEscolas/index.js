@@ -114,9 +114,9 @@ const CadastroEscolas = () => {
 
         setspinner(true);
 
-        if (novaEscola.nome == '' || novaEscola.diretor == '' || novaEscola.localizacao == '' || novaEscola.turnos == null) {
+        if (novaEscola.nome == '' || novaEscola.localizacao == '' || novaEscola.turnos == null) {
             setTimeout(() => {
-                notify("tr", "danger", "todos os campos devem ser preenchidos");
+                notify("tr", "danger", "todos os campos (com exceção do diretor) são de preenchimento obrigatório");
                 setspinner(false);
             }, 1000)
         } else {
