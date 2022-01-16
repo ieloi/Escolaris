@@ -23,6 +23,7 @@ import Icons from "views/Icons.js";
 
 import CadastroEscolas from "components/CadastroEscolas";
 import ListagemEscolas from "components/ListagemEscolas";
+import Sobre from "components/Sobre";
 
 const dashboardRoutes = [
   {
@@ -78,7 +79,7 @@ const dashboardRoutes = [
     path: "/sobre",
     name: "Sobre",
     icon: "nc-icon nc-quote",
-    component: Notifications,
+    component: Sobre,
     layout: "/admin",
   }
 ];
