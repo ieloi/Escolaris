@@ -22,6 +22,7 @@ import Notifications from "views/Notifications.js";
 import Icons from "views/Icons.js";
 
 import CadastroEscolas from "components/CadastroEscolas";
+import ListagemEscolas from "components/ListagemEscolas";
 
 const dashboardRoutes = [
   {
@@ -63,7 +64,7 @@ const dashboardRoutes = [
     path: "/listagem-escolas",
     name: "Listagem Escolas",
     icon: "nc-icon nc-backpack",
-    component: Notifications,
+    component: ListagemEscolas,
     layout: "/admin",
   },
   {
