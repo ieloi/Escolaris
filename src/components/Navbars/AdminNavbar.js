@@ -15,14 +15,18 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Navbar, Container, Nav, Dropdown, Button } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 
 import routes from "routes.js";
 
 function Header() {
+  const history = useHistory();
   const location = useLocation();
+  const [usuarioLogado, setusuarioLogado] = useState({});
+
   const mobileSidebarToggle = (e) => {
     e.preventDefault();
     document.documentElement.classList.toggle("nav-open");
@@ -43,6 +47,11 @@ function Header() {
     }
     return "Brand";
   };
+
+  useEffect(() => {
+    setusuarioLogado(JSON.parse(window.sessionStorage.getItem("credenciais-usuario")));
+  }, [])
+
   return (
     <Navbar bg="light" expand="lg">
       <Container fluid>
@@ -67,11 +76,14 @@ function Header() {
         </Navbar.Toggle>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto" navbar>
+            <p className="pt-3 pl-2">Usuario: {usuarioLogado.nome}</p>
             <Nav.Item>
               <Nav.Link
                 className="m-0"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
+                onClick={() => {
+                  window.sessionStorage.removeItem("credenciais-usuario")
+                  history.push("/");
+                }}
               >
                 <span className="no-icon">Log out</span>
               </Nav.Link>

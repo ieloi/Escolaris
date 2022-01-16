@@ -80,7 +80,7 @@ const dashboardRoutes = [
     icon: "nc-icon nc-quote",
     component: Notifications,
     layout: "/admin",
-  },
+  }
 ];
 
 export default dashboardRoutes;
