@@ -90,7 +90,7 @@ const Login = () => {
                     setdadosLogin({ ...dadosLogin, nome: userEncontrado.nome });
                     window.sessionStorage.setItem('credenciais-usuario', JSON.stringify({ nome: userEncontrado.nome, token: userEncontrado.token }));
                     setspinner(false);
-                    history.push("/admin");
+                    history.push("/admin/sobre");
                 }
             }
         }, 1000);
