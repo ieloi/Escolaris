@@ -72,7 +72,7 @@ function Admin() {
           <Footer />
         </div>
       </div>
-      <Redirect from="/admin" to="/admin/dashboard" />
+      <Redirect from="/admin" to="/admin/sobre" />
     </>
   );
 }
