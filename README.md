@@ -22,4 +22,15 @@ Para executar o projeto é necessario ter o [Node.js](https://nodejs.org/en/) in
 - Clonar o Projeto do Github: `git clone https://github.com/ieloi/Escolaris.git`
 - Acessar a pasta do projeto e fazer a instalação dos .node_modules via terminal: `npm install`
 - Para executar o projeto via terminal: `npm start` e acessar `http://localhost:3000`
+- Usuarios cadastrados no sistema
+```
+// usuario teste
+email: teste@email.com
+senha: 1234
+
+// usuario admin
+email: admin@hotmail.com
+senha: admin
+```
+
 
