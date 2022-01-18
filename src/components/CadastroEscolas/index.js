@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
-import { Card, Container, Row, Table, Col, Form, Button, Spinner, Alert } from "react-bootstrap";
-
+import { Card, Container, Row, Table, Col, Form, Button, Spinner } from "react-bootstrap";
 import NotificationAlert from "react-notification-alert";
+import { useFormik } from 'formik';
 
 const CadastroEscolas = () => {
 
@@ -36,17 +36,7 @@ const CadastroEscolas = () => {
         },
     ];
 
-    let escola_cadastrar = {
-        id: 0,
-        nome: '',
-        diretor: '',
-        localizacao: '',
-        turnos: null
-    }
-
     const [listaEscolas, setlistaEscolas] = useState(escolas_cadastradas);
-    const [novaEscola, setNovaEscola] = useState(escola_cadastrar);
-    const [checkboxTurnos, setcheckboxTurnos] = useState([]); //Array que guarda a lista de turnos
     const [spinner, setspinner] = useState(false);
     const notificationAlertRef = useRef(null); //usado pelo template para gerar notificações
 
@@ -76,22 +66,6 @@ const CadastroEscolas = () => {
         return turnos;
     }
 
-    const handleChange = (e) => {
-        const { name, value, checked } = e.target;
-
-        if ((name === 'turnosM' || name === 'turnosT' || name === 'turnosN' || name === 'turnosI') && checked === true) {
-            checkboxTurnos.push(value);
-            setcheckboxTurnos(checkboxTurnos);
-            setNovaEscola({ ...novaEscola, turnos: checkboxTurnos });
-        } else if ((name === 'turnosM' || name === 'turnosT' || name === 'turnosN' || name === 'turnosI') && checked === false) {
-            checkboxTurnos.splice(checkboxTurnos.indexOf(value), 1);
-            setcheckboxTurnos(checkboxTurnos);
-            setNovaEscola({ ...novaEscola, turnos: checkboxTurnos });
-        } else {
-            setNovaEscola({ ...novaEscola, [name]: value });
-        }
-    }
-
     //produção dos alertas de sucesso e erro
     const notify = (place, color, message) => {
         let options = {};
@@ -109,43 +83,57 @@ const CadastroEscolas = () => {
         notificationAlertRef.current.notificationAlert(options);
     }
 
-    const cadastrarEscola = (e) => {
-        e.preventDefault();
+    const cadastrarEscola = values => {
 
         setspinner(true);
 
-        if (novaEscola.nome == '' || novaEscola.localizacao == '' || novaEscola.turnos == null) {
-            setTimeout(() => {
-                notify("tr", "danger", "todos os campos (com exceção do diretor) são de preenchimento obrigatório");
-                setspinner(false);
-            }, 1000)
-        } else {
-            setTimeout(() => {
-                let novoId = parseInt(listaEscolas.length);
+        setTimeout(() => {
+            let novoId = parseInt(listaEscolas.length) + 1;
 
-                setNovaEscola({ ...novaEscola, id: novoId + 1 });
+            const listaEscolasNovo = [...listaEscolas, {
+                id: novoId,
+                ...values
+            }];
 
-                const listaEscolasNovo = [...listaEscolas, {
-                    id: novoId,
-                    ...novaEscola
-                }];
+            setlistaEscolas(listaEscolasNovo);
 
-                setlistaEscolas(listaEscolasNovo);
+            setspinner(false);
 
-                //limpeza dos campos pertencentes ao formulario 
-                setNovaEscola({ nome: '', diretor: '', localizacao: '', turnos: null });
-                setcheckboxTurnos([]);
-                e.target.turnosM.checked = false;
-                e.target.turnosT.checked = false;
-                e.target.turnosN.checked = false;
-                e.target.turnosI.checked = false;
+            notify("tr", "success", "Escola gravada com sucesso");
+        }, 1000);
 
-                setspinner(false);
-
-                notify("tr", "success", "Escola gravada com sucesso");
-            }, 1000);
-        }
     }
+
+    const validate = values => {
+        const errors = {}
+
+        if (values.nome == "" || values.localizacao == "" || values.turnos.length == 0) {
+            errors.todos = "Todos os campos (com exceção do nome do diretor) devem ser preenchidos"
+        }
+
+        return errors;
+    }
+
+    //Criação de Formulário com o Formik
+    const formik = useFormik({
+        initialValues: {
+            nome: '',
+            diretor: '',
+            localizacao: '',
+            turnos: []
+        },
+        validate,
+        onSubmit: (values, { resetForm }) => {
+            cadastrarEscola(values);
+            resetForm();
+
+            //limpeza dos checkbox de forma manual devido a nao encontrar como limpar o checkbox com o Formik
+            document.getElementById('turnoManha').checked = false;
+            document.getElementById('turnoTarde').checked = false;
+            document.getElementById('turnoNoite').checked = false;
+            document.getElementById('turnoIntegral').checked = false;
+        }
+    });
 
     return (
         <>
@@ -156,22 +144,27 @@ const CadastroEscolas = () => {
                 <Row>
                     <Card className="w-100 p-3">
                         <Card.Title as="h3" className="mb-3 mt-2">Cadastrar Escola</Card.Title>
-                        <Form onSubmit={cadastrarEscola}>
+                        {formik.errors.todos ? (
+                            <div className="text-muted text-danger">
+                                {formik.errors.todos}
+                            </div>
+                        ) : null}
+                        <Form onSubmit={formik.handleSubmit}>
                             <Row>
                                 <Form.Group as={Col} md="6" className="mb-3">
                                     <Form.Label htmlFor="nomeEscola">Nome da Escola:</Form.Label>
-                                    <Form.Control type="text" id="nomeEscola" name="nome" placeholder="Ex: Escola Lorem Ipsum" onChange={handleChange} value={novaEscola.nome} />
+                                    <Form.Control type="text" id="nomeEscola" name="nome" placeholder="Ex: Escola Lorem Ipsum" onChange={formik.handleChange} value={formik.values.nome} />
                                 </Form.Group>
 
                                 <Form.Group as={Col} md="6" className="mb-3">
                                     <Form.Label htmlFor="nomeDiretor">Nome do Diretor:</Form.Label>
-                                    <Form.Control type="text" id="nomeDiretor" name="diretor" placeholder="Ex: lorenzo ipsolium" onChange={handleChange} value={novaEscola.diretor} />
+                                    <Form.Control type="text" id="nomeDiretor" name="diretor" placeholder="Ex: lorenzo ipsolium" onChange={formik.handleChange} value={formik.values.diretor} />
                                 </Form.Group>
                             </Row>
                             <Row>
                                 <Form.Group as={Col} md="6" className="mb-3">
                                     <Form.Label htmlFor="selectLocalizacao">Localização da Escola</Form.Label>
-                                    <Form.Control id="selectLocalizacao" name="localizacao" as="select" onChange={handleChange} value={novaEscola.localizacao} >
+                                    <Form.Control id="selectLocalizacao" name="localizacao" as="select" onChange={formik.handleChange} value={formik.values.localizacao} >
                                         <option value="">Selecione uma opção:</option>
                                         <option value="1">Urbana</option>
                                         <option value="2">Rural</option>
@@ -182,19 +175,19 @@ const CadastroEscolas = () => {
                                     <Form.Label>Turnos da Escola (Selecione uma ou mais opções)</Form.Label>
                                     <br />
                                     <div className="pl-3">
-                                        <input type="checkbox" id="turnoManha" name="turnosM" value="M" onChange={handleChange} />
+                                        <input type="checkbox" id="turnoManha" name="turnos" value="M" onChange={formik.handleChange} />
                                         <label htmlFor="turnoManha">&nbsp;&nbsp;Manhã</label>
                                         <br />
 
-                                        <input type="checkbox" id="turnoTarde" name="turnosT" value="T" onChange={handleChange} />
+                                        <input type="checkbox" id="turnoTarde" name="turnos" value="T" onChange={formik.handleChange} />
                                         <label htmlFor="turnoTarde">&nbsp;&nbsp;Tarde</label>
                                         <br />
 
-                                        <input type="checkbox" id="turnoNoite" name="turnosN" value="N" onChange={handleChange} />
+                                        <input type="checkbox" id="turnoNoite" name="turnos" value="N" onChange={formik.handleChange} />
                                         <label htmlFor="turnoNoite">&nbsp;&nbsp;Noite</label>
                                         <br />
 
-                                        <input type="checkbox" id="turnoIntegral" name="turnosI" value="I" onChange={handleChange} />
+                                        <input type="checkbox" id="turnoIntegral" name="turnos" value="I" onChange={formik.handleChange} />
                                         <label htmlFor="turnoIntegral">&nbsp;&nbsp;Integral</label>
                                     </div>
                                 </Form.Group>
