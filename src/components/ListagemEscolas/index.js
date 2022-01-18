@@ -123,8 +123,8 @@ const ListagemEscolas = () => {
     const validate = values => {
         const errors = {}
 
-        if ((values.nome.length < 3 || !values.nome) && !values.municipio) {
-            errors.ambos = "Para a busca ser realizada é necessario preencher o nome (3 ou mais letras) e/ou escolher um municipio"
+        if ((values.nome.length < 4 || !values.nome) && !values.municipio) {
+            errors.ambos = "Para a busca ser realizada é necessario preencher o nome (4 ou mais letras) e/ou escolher um municipio"
         }
 
         return errors;

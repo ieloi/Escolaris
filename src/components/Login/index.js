@@ -88,7 +88,7 @@ const Login = () => {
         if (!values.senha) {
             errors.senha = 'Preenchimento de Senha necessário';
         } else if (values.senha.length < 4) {
-            errors.senha = 'Senha deve ter mais de 4 caracteres';
+            errors.senha = 'Senha deve ter 4 ou mais caracteres';
         }
 
         return errors;
