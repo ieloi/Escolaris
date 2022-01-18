@@ -13,6 +13,7 @@ Aplicação Web criada como desafio do Teste Seletivo Front-End da Mobieduca.me
 - [React.JS](https://pt-br.reactjs.org/)
 - [React Bootstrap](https://react-bootstrap.github.io/)
 - [Axios](https://axios-http.com/) (Requisições para API)
+- [Formik](https://formik.org/) (Formulários)
 - [Font Awesome Icons](https://fontawesome.com/)
 - [Light Bootstrap Dashboard React Template](https://www.creative-tim.com/product/light-bootstrap-dashboard-react)
 

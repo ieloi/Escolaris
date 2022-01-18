@@ -50,6 +50,9 @@ const Sobre = () => {
                         <ListGroup.Item action href="https://axios-http.com/" target="_blank">
                             <i className="fab fa-safari mr-2"></i>Axios
                         </ListGroup.Item>
+                        <ListGroup.Item action href="https://formik.org/" target="_blank">
+                            <i className="fab fa-wpforms mr-2"></i>Formik
+                        </ListGroup.Item>
                         <ListGroup.Item action href="https://www.creative-tim.com/product/light-bootstrap-dashboard-react" target="_blank">
                             <i className="far fa-window-maximize mr-2"></i>Light Bootstrap Dashboard React Template
                         </ListGroup.Item>
